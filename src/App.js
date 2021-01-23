@@ -17,6 +17,7 @@ function getModalStyle() {
   };
 }
 
+// Material-UI styling
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
@@ -32,15 +33,23 @@ function App() {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
+
+  // Sign up and sign in states
   const [open, setOpen] = useState(false);
+  const [openSignIn, setOpenSignIn] = useState(false);
+
+  // Current user state
+  const [user, setUser] = useState(null);
+
   // Handling login/signup input fields
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // User's posts
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState(null);
 
+  // Setting the state based on whether a user is signed in or not
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
@@ -70,14 +79,30 @@ function App() {
 
   const signUp = (event) => {
     event.preventDefault();
+    // Create and authenticate a new user
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
         return authUser.user.updateProfile({
+          // Once authenticated, set their username as their display name
           displayName: username,
         });
       })
       .catch((error) => alert(error.message));
+
+    // Close modal after the user is done signing up
+    setOpen(false);
+  };
+
+  const signIn = (event) => {
+    event.preventDefault();
+    // Sign in using the user's email and password
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
+
+    // Close modal after the user is done signing in
+    setOpenSignIn(false);
   };
 
   return (
@@ -118,6 +143,35 @@ function App() {
           </form>
         </div>
       </Modal>
+      {/* Sign in modal */}
+      <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
+        <div style={modalStyle} className={classes.paper}>
+          <form className="app__signUp">
+            <center>
+              <img
+                className="app__headerImage"
+                src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                alt="Instagram Logo"
+              />
+            </center>
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" onClick={signIn}>
+              Sign In
+            </Button>
+          </form>
+        </div>
+      </Modal>
       {/* Header */}
       <div className="app__header">
         <img
@@ -130,8 +184,11 @@ function App() {
         // If a user is logged in, show a logout button
         <Button onClick={() => auth.signOut()}>Logout</Button>
       ) : (
-        // If a user is not logged in, show a sign up button
-        <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        <div className="app_loginContainer">
+          {/* If a user is not logged in, show sign in and a sign up buttons */}
+          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        </div>
       )}
 
       {/* Posts */}
