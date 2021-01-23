@@ -42,24 +42,21 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         // User has logged in
         console.log(authUser);
         setUser(authUser);
-
-        if (authUser.displayName) {
-          // Don't update username
-        } else {
-          return authUser.updateProfile({
-            displayName: username,
-          });
-        }
       } else {
         // User has logged out
         setUser(null);
       }
     });
+
+    return () => {
+      // Perform clean up actions
+      unsubscribe();
+    };
   }, [user, username]);
 
   // Runs code based on a condition
@@ -75,6 +72,11 @@ function App() {
     event.preventDefault();
     auth
       .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        return authUser.user.updateProfile({
+          displayName: username,
+        });
+      })
       .catch((error) => alert(error.message));
   };
 
@@ -124,8 +126,13 @@ function App() {
           alt="Instagram Logo"
         />
       </div>
-
-      <Button onClick={() => setOpen(true)}>Sign Up</Button>
+      {user ? (
+        // If a user is logged in, show a logout button
+        <Button onClick={() => auth.signOut()}>Logout</Button>
+      ) : (
+        // If a user is not logged in, show a sign up button
+        <Button onClick={() => setOpen(true)}>Sign Up</Button>
+      )}
 
       {/* Posts */}
       {posts.map(({ id, post }) => (
