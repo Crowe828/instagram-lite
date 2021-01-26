@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { auth, db } from "./firebase";
 import Post from "./Components/Post";
+import ImageUpload from "./Components/ImageUpload";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import "./App.css";
@@ -71,10 +72,14 @@ function App() {
   // Runs code based on a condition
   useEffect(() => {
     // Where the code runs
-    db.collection("posts").onSnapshot((snapshot) => {
-      // Every time a new post is added, fire this code
-      setPosts(snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() })));
-    });
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        // Every time a new post is added, fire this code
+        setPosts(
+          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+        );
+      });
   }, []);
 
   const signUp = (event) => {
@@ -108,6 +113,7 @@ function App() {
   return (
     <div className="App">
       {/* BEM */}
+
       {/* Sign up modal */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
@@ -179,17 +185,17 @@ function App() {
           src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
           alt="Instagram Logo"
         />
+        {user ? (
+          // If a user is logged in, show a logout button
+          <Button onClick={() => auth.signOut()}>Logout</Button>
+        ) : (
+          <div className="app_loginContainer">
+            {/* If a user is not logged in, show sign in and a sign up buttons */}
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
-      {user ? (
-        // If a user is logged in, show a logout button
-        <Button onClick={() => auth.signOut()}>Logout</Button>
-      ) : (
-        <div className="app_loginContainer">
-          {/* If a user is not logged in, show sign in and a sign up buttons */}
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
-        </div>
-      )}
 
       {/* Posts */}
       {posts.map(({ id, post }) => (
@@ -200,6 +206,11 @@ function App() {
           imageUrl={post.imageUrl}
         />
       ))}
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+        <h3>You must be logged in to upload!</h3>
+      )}
     </div>
   );
 }
