@@ -205,6 +205,7 @@ function App() {
             <Post
               key={id}
               postId={id}
+              user={user}
               username={post.username}
               caption={post.caption}
               imageUrl={post.imageUrl}
@@ -214,6 +215,7 @@ function App() {
         <div className="app_postsRight">
           <InstagramEmbed
             url="https://www.instagram.com/p/CJg1jk4h_3o/"
+            clientAccessToken="123|456"
             maxWidth={320}
             hideCaption={false}
             containerTagName="div"
