@@ -210,6 +210,12 @@ function App() {
           </div>
         )}
       </div>
+      {/* Displaying the user's username at the top of the page */}
+      {user?.displayName ? (
+        <h1 className="app__welcome">Welcome, @{user?.displayName}!</h1>
+      ) : (
+        <></>
+      )}
 
       <div className="app__posts">
         <div>
@@ -231,7 +237,10 @@ function App() {
       {user?.displayName ? (
         <ImageUpload username={user.displayName} />
       ) : (
-        <h3>You must be logged in to upload!</h3>
+        // If you're not logged in...
+        <h3 className="app__notLoggedIn">
+          Create an account or login to start posting!
+        </h3>
       )}
     </div>
   );

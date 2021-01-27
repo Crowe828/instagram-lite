@@ -42,3 +42,17 @@
 .app__avatar {
   margin-right: 5px;
 }
+
+.app__notLoggedIn {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
+}
+
+.app__welcome {
+  text-align: center;
+  padding-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

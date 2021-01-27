@@ -54,3 +54,8 @@
   background-color: transparent;
   border-top: 1px solid lightgray;
 }
+
+.post__button:hover {
+  background-color: #f0f0f0;
+  color: rgb(86, 120, 153);
+}
