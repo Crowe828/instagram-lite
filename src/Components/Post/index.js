@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import "./Post.css";
 import firebase from "firebase";
+import Avatar from "@material-ui/core/Avatar";
 import { db } from "../../firebase";
+import "./Post.css";
 
+// Props passed in from App.js
 function Post({ postId, user, username, caption, imageUrl }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
   useEffect(() => {
     let unsubscribe;
+    // Pulling posts and comments from the db
     if (postId) {
       unsubscribe = db
         .collection("posts")
@@ -25,6 +27,7 @@ function Post({ postId, user, username, caption, imageUrl }) {
     };
   }, [postId]);
 
+  // Adding new comments to the db
   const postComment = (event) => {
     event.preventDefault();
     db.collection("posts").doc(postId).collection("comments").add({
@@ -53,15 +56,17 @@ function Post({ postId, user, username, caption, imageUrl }) {
         <strong>{username}</strong> {caption}
       </h4>
 
+      {/* Comments already on the post */}
       <div className="post__comments">
         {comments.map((comment) => (
-          <p>
+          // Each individual post
+          <p className="post__singleComment">
             <strong>{comment.username}</strong> {comment.text}
           </p>
         ))}
       </div>
 
-      {/* Comments */}
+      {/* Add a comment */}
       {user && (
         <form className="post__commentBox">
           <input

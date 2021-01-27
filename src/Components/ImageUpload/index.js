@@ -8,7 +8,6 @@ function ImageUpload({ username }) {
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const [caption, setCaption] = useState("");
-  //   const [url, setUrl] = useState("");
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
@@ -58,15 +57,26 @@ function ImageUpload({ username }) {
       <progress className="imageUpload__progress" value={progress} max="100" />
       {/* Caption input */}
       <input
+        className="imageUpload__input"
         type="text"
         placeholder="Enter a caption..."
         onChange={(event) => setCaption(event.target.value)}
         value={caption}
       />
       {/* File picker */}
-      <input type="file" onChange={handleChange} />
+      <input
+        className="imageUpload__file"
+        type="file"
+        onChange={handleChange}
+      />
       {/* Post button */}
-      <Button onClick={handleUpload}>Upload</Button>
+      <Button
+        className="imageUpload__button"
+        onClick={handleUpload}
+        variant="contained"
+      >
+        Upload
+      </Button>
     </div>
   );
 }

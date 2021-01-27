@@ -34,6 +34,11 @@
   justify-content: center;
 }
 
-.app_postsRight {
-  margin-left: 20px;
+.app__loggedIn {
+  display: flex;
+  flex-direction: row;
+}
+
+.app__avatar {
+  margin-right: 5px;
 }

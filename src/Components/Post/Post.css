@@ -5,6 +5,16 @@
   margin-bottom: 45px;
 }
 
+.post__header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.post__avatar {
+  margin-right: 10px;
+}
+
 .post__image {
   width: 100%;
   object-fit: contain;
@@ -17,14 +27,12 @@
   padding: 20px;
 }
 
-.post__header {
-  display: flex;
-  align-items: center;
+.post__comments {
   padding: 20px;
 }
 
-.post__avatar {
-  margin-right: 10px;
+.post__singleComment {
+  padding-bottom: 10px;
 }
 
 .post__commentBox {
@@ -45,8 +53,4 @@
   color: #6082a3;
   background-color: transparent;
   border-top: 1px solid lightgray;
-}
-
-.post__comments {
-  padding: 20px;
 }

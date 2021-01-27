@@ -6,10 +6,19 @@
   margin-right: auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  /* background-color: white;
-  border-top: 1px solid lightgray; */
+  border: none;
+  padding: 10px;
 }
 
 .imageUpload__progress {
   width: 100%;
+}
+
+.imageUpload__input {
+  border: none;
+  padding: 10px;
+}
+
+.imageUpload__file {
+  padding: 10px;
 }

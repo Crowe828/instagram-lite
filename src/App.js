@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { auth, db } from "./firebase";
-import Post from "./Components/Post";
-import ImageUpload from "./Components/ImageUpload";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
-import "./App.css";
 import { Button, Input } from "@material-ui/core";
-import InstagramEmbed from "react-instagram-embed";
+import Avatar from "@material-ui/core/Avatar";
+import Post from "./Components/Post";
+import ImageUpload from "./Components/ImageUpload";
+import "./App.css";
 
+// Modal styling from Material-UIs modal documentation
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -113,8 +114,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* BEM */}
-
       {/* Sign up modal */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
@@ -126,18 +125,21 @@ function App() {
                 alt="Instagram Logo"
               />
             </center>
+            {/* Create a username */}
             <Input
               placeholder="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+            {/* Enter an email */}
             <Input
               placeholder="email"
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            {/* Create a password */}
             <Input
               placeholder="password"
               type="password"
@@ -150,6 +152,7 @@ function App() {
           </form>
         </div>
       </Modal>
+
       {/* Sign in modal */}
       <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
         <div style={modalStyle} className={classes.paper}>
@@ -161,12 +164,14 @@ function App() {
                 alt="Instagram Logo"
               />
             </center>
+            {/* Enter an email of an existing account */}
             <Input
               placeholder="email"
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            {/* Enter the corresponding password */}
             <Input
               placeholder="password"
               type="password"
@@ -179,6 +184,7 @@ function App() {
           </form>
         </div>
       </Modal>
+
       {/* Header */}
       <div className="app__header">
         <img
@@ -187,8 +193,15 @@ function App() {
           alt="Instagram Logo"
         />
         {user ? (
-          // If a user is logged in, show a logout button
-          <Button onClick={() => auth.signOut()}>Logout</Button>
+          // If a user is logged in, show a logout button and their avatar
+          <div className="app__loggedIn">
+            <Avatar
+              className="app__avatar"
+              alt={user?.displayName}
+              src="/static/images/avatar/1.jpg"
+            />
+            <Button onClick={() => auth.signOut()}>Logout</Button>
+          </div>
         ) : (
           <div className="app_loginContainer">
             {/* If a user is not logged in, show sign in and a sign up buttons */}
@@ -199,7 +212,7 @@ function App() {
       </div>
 
       <div className="app__posts">
-        <div className="app_postsLeft">
+        <div>
           {/* Posts */}
           {posts.map(({ id, post }) => (
             <Post
@@ -212,22 +225,9 @@ function App() {
             />
           ))}
         </div>
-        <div className="app_postsRight">
-          <InstagramEmbed
-            url="https://www.instagram.com/p/CJg1jk4h_3o/"
-            clientAccessToken="123|456"
-            maxWidth={320}
-            hideCaption={false}
-            containerTagName="div"
-            protocol=""
-            injectScript
-            onLoading={() => {}}
-            onSuccess={() => {}}
-            onAfterRender={() => {}}
-            onFailure={() => {}}
-          />
-        </div>
       </div>
+
+      {/* Upload new pictures */}
       {user?.displayName ? (
         <ImageUpload username={user.displayName} />
       ) : (
